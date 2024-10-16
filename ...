@@ -1,0 +1,66 @@
+import discord
+import os
+import random
+from utils import suma
+from discord.ext import commands
+
+# Reemplaza 'YOUR_BOT_TOKEN' con el token de tu bot de Discord
+TOKEN = 'TU TOKEN AQUI'
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+# Comando para explicar los comandos
+@bot.command()
+async def comandos(ctx):
+    help_text = (
+        "Estos son los comandos disponibles:\n"
+        "1. `$comandos` - Explica los comandos del bot.\n"
+        "2. `$suma` - Suma dos números y muestra el resultado.\n"
+        "3. `$datos` - Muestra datos interesantes sobre GabrielVS.\n"
+        "4. `$video url` - Muestra un video de YouTube (proporciona la URL del video).\n"
+        "5. `$mem1` - pone un meme de Colombia.\n"
+    )
+    await ctx.send(help_text)
+
+# Comando para sumar dos números
+
+@bot.command(name='sumar', aliases=['suma', 'add'])
+async def sumar(ctx, num1: float, num2: float):
+    try:
+        resultado = num1 + num2
+        await ctx.send(f'La suma de {num1} y {num2} es {resultado}')
+    except ValueError:
+        await ctx.send("Por favor, ingresa dos números válidos.")
+
+# Comando para decir cosas interesantes sobre Jehosua
+@bot.command()
+async def datos(ctx):
+    datos = (
+        "Aquí tienes algunos datos interesantes sobre mi:\n"
+        "1.me gusta roblox fornite y god of wars.\n"
+        "2.me gusta mas la noche que el dia porque no hace calor y casi no hay gente '.\n"
+        "3.tengo 3 hermanos de los cuales solo vivo con 1.\n"
+        "4.tengo un huskie siberiano que lo rescatamos y tenemos 2 años con ella"
+    )
+    await ctx.send(datos)
+
+# Comando para mostrar un video de YouTube
+@bot.command()
+async def video(ctx):
+    await ctx.send(f'https://www.youtube.com/watch?v=oRXldUwe0ZY&ab_channel=Joe')
+
+# comando para memes
+@bot.command()
+async def mem(ctx):
+    img_mem = random.choice(os.listdir('imagenes'))
+    with open(f'imagenes/{img_mem}', 'rb') as f:
+        # ¡Vamos a almacenar el archivo de la biblioteca Discord convertido en esta variable!
+        picture = discord.File(f)
+    # A continuación, podemos enviar este archivo como parámetro.
+    await ctx.send(file=picture)
+
+# Ejecuta el bot
+bot.run(TOKEN)
